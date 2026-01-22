@@ -1,0 +1,684 @@
+{
+  "name": "Social media scheduler",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "minutes",
+              "minutesInterval": 1
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        -800,
+        256
+      ],
+      "id": "4428e2bf-03bc-42b1-a733-37d36461ff3f",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "jsCode": "const now = new Date();\nconst currentDate = now.toISOString().split('T')[0]; // YYYY-MM-DD\nconst currentTime = now.toTimeString().slice(0, 5); // HH:MM\n\n// Filter posts that match current date/time and are scheduled\nreturn $input.all().filter(item => {\n  const post = item.json;\n  \n  return post.scheduled_date === currentDate &&\n         post.scheduled_time === currentTime &&\n         post.status === 'scheduled' &&\n         post.posted_at === \"\";\n});"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -240,
+        480
+      ],
+      "id": "10f28781-da3d-4f00-a1fc-c5673f0b3153",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1tInUrYbqdnPU8s5Ug3xo6xAcBBHOiE7Ly0vqIX3lX0I",
+          "mode": "list",
+          "cachedResultName": "Social Media Scheduler",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1tInUrYbqdnPU8s5Ug3xo6xAcBBHOiE7Ly0vqIX3lX0I/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1tInUrYbqdnPU8s5Ug3xo6xAcBBHOiE7Ly0vqIX3lX0I/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "post_id": "={{ $json.post_id }}",
+            "status": "posted",
+            "posted_at": "={{ $now.toISO() }}"
+          },
+          "matchingColumns": [
+            "post_id"
+          ],
+          "schema": [
+            {
+              "id": "post_id",
+              "displayName": "post_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "scheduled_date",
+              "displayName": "scheduled_date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "scheduled_time",
+              "displayName": "scheduled_time",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "content",
+              "displayName": "content",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "platform",
+              "displayName": "platform",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "posted_at",
+              "displayName": "posted_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "error_message",
+              "displayName": "error_message",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "media_url",
+              "displayName": "media_url",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1744,
+        352
+      ],
+      "id": "fe63cd3d-6996-43c5-91e9-e8a7e421131b",
+      "name": "Update row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "EfZHB5fptNJVNHi9",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1tInUrYbqdnPU8s5Ug3xo6xAcBBHOiE7Ly0vqIX3lX0I",
+          "mode": "list",
+          "cachedResultName": "Social Media Scheduler",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1tInUrYbqdnPU8s5Ug3xo6xAcBBHOiE7Ly0vqIX3lX0I/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1tInUrYbqdnPU8s5Ug3xo6xAcBBHOiE7Ly0vqIX3lX0I/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -544,
+        384
+      ],
+      "id": "85e2125e-abcc-4cd3-9ece-2f9fd0263dc0",
+      "name": "Get row(s) in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "EfZHB5fptNJVNHi9",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "-1003324044471",
+        "text": "={{ $json.content }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        208,
+        -112
+      ],
+      "id": "bfe80e44-489c-4522-b59b-81607efac4b9",
+      "name": "Send a text message",
+      "webhookId": "73bb3489-de96-44d9-a09d-8395c606143b",
+      "alwaysOutputData": false,
+      "credentials": {
+        "telegramApi": {
+          "id": "J3PeFSCKXD2Fqqwe",
+          "name": "Telegram account"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        1504,
+        352
+      ],
+      "id": "96886a35-94d2-41ef-be76-c8d449390aec",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "40c1d643-1ce3-429d-8e1b-ce70f41bbc34",
+              "leftValue": "={{ $json.ok }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            },
+            {
+              "id": "1a6ec046-db36-40bf-8b04-c0afb856348d",
+              "leftValue": "={{ $json.success }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            },
+            {
+              "id": "07abd468-52f0-4611-ac9a-35c97c268d54",
+              "leftValue": "={{ $json.messages }}",
+              "rightValue": 0,
+              "operator": {
+                "type": "array",
+                "operation": "lengthGt",
+                "rightType": "number"
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        736,
+        80
+      ],
+      "id": "70fa6ff8-4cdb-4b8e-abb2-450c282bf739",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.platform }}",
+                    "rightValue": "telegram",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "104af98d-4925-46b0-acb5-210142b70d23"
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "82931a2e-7703-4351-b73b-469783a20bc6",
+                    "leftValue": "={{ $json.platform }}",
+                    "rightValue": "discord",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "f818bc56-df7e-44b5-83cc-666ae1810ab1",
+                    "leftValue": "={{ $json.platform }}",
+                    "rightValue": "whatsapp",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        -80,
+        64
+      ],
+      "id": "6e6d606f-37bb-489b-ad94-93ffb94530d3",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "02e9c4f0-83a3-4e21-b9a0-fee322564415",
+              "name": "status",
+              "value": "posted",
+              "type": "string"
+            },
+            {
+              "id": "2c7eb476-a2e4-4c44-8ec5-53ea2143f247",
+              "name": "posted_at",
+              "value": "={{ $now }}",
+              "type": "string"
+            },
+            {
+              "id": "1cf8c3a8-afb2-4024-becf-aa48132595bd",
+              "name": "platform_message_id",
+              "value": "={{ $json.result.message_id }}",
+              "type": "number"
+            },
+            {
+              "id": "dd0e3c82-6dce-46c3-96e4-045b80e140b6",
+              "name": "error_message",
+              "value": "\"\"",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1104,
+        0
+      ],
+      "id": "94d858a6-3938-4c0b-aa01-32e55a644fc5",
+      "name": "True"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "a8a6299b-39cd-4a96-af47-ee29c6af250c",
+              "name": "status",
+              "value": "failed",
+              "type": "string"
+            },
+            {
+              "id": "020af4d6-df6d-4fbc-96a9-57c1d65ef93b",
+              "name": "posted_at",
+              "value": "\"\"",
+              "type": "string"
+            },
+            {
+              "id": "221b0d51-49f8-40fe-963f-0bf77a2ad69d",
+              "name": "platform_message_id",
+              "value": "\"\"",
+              "type": "string"
+            },
+            {
+              "id": "c8ff17df-87c4-458c-bd95-67cfcff53a94",
+              "name": "error_message",
+              "value": "={{$json.description || 'Unknown error'}}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1104,
+        176
+      ],
+      "id": "4ec41d3c-7893-486f-8cd1-30564bac0249",
+      "name": "Error"
+    },
+    {
+      "parameters": {
+        "authentication": "webhook",
+        "content": "={{ $json.content }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.discord",
+      "typeVersion": 2,
+      "position": [
+        208,
+        80
+      ],
+      "id": "09662549-7386-41d7-8468-a955c4835fa2",
+      "name": "Discord",
+      "webhookId": "c7557386-c852-4203-81d3-6c75b4bbae6c",
+      "credentials": {
+        "discordWebhookApi": {
+          "id": "DBaeU2SxMkKi18Ln",
+          "name": "Discord Webhook account"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "operation": "send",
+        "phoneNumberId": "910423008828062",
+        "recipientPhoneNumber": "971503209225",
+        "textBody": "={{ $json.content }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.whatsApp",
+      "typeVersion": 1.1,
+      "position": [
+        208,
+        288
+      ],
+      "id": "cdb71fc8-f0ef-46b1-866f-58eef1287aee",
+      "name": "Send message",
+      "webhookId": "f0a9f9cb-1f1e-4223-bc98-540c1f2d880d",
+      "credentials": {
+        "whatsAppApi": {
+          "id": "6ePkH044nGsEG5Wy",
+          "name": "WhatsApp account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Get row(s) in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          },
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a text message": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Update row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "True",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Error",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "Send a text message",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Discord",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Send message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "True": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Error": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Discord": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send message": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false
+  },
+  "versionId": "cd4f7797-552b-4946-9251-a2ba8a4ecdf9",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "2ceed65da0c3914208ea731832f33b0a7b8b0ff9381e410157f5ae297f2cb9ab"
+  },
+  "id": "qG1o3HcaxI1Qa09FYsqVs",
+  "tags": []
+}
